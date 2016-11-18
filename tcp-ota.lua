@@ -1,87 +1,139 @@
 print("TCP OTA Server starting...")
+tcp_ota = {}
 
-loggedin = false
-lastcmd = ""
-conn = nil
+tcp_ota.loggedin = false
+tcp_ota.lastcmd = ""
+tcp_ota.conn = nil
+tcp_ota.sending = false
+tcp_ota.response = {}
 
-function s_output(str) 
+tcp_ota.sendcomplete = function(sk)
+    --Send the rest if any. 
+    if #tcp_ota.response > 0 then 
+        msg = table.remove(tcp_ota.response, 1)
+        if (msg ~= nil and tcp_ota.conn ~= nil) then 
+            tcp_ota.conn:send(msg)
+        end
+        return
+    end
+    --Done 
+    --print("Que complete")
+    --uart.write(0, "Que complete!\n")
+    --sending = false
+    _G.tcp_ota.sending = false
+end
 
-    --REFORMAT str
-    sub = string.sub(str,string.len(str)-1)
-    sub2 = string.sub(str,string.len(str))
+tcp_ota.send = function(msg)
+    tcp_ota.response[#tcp_ota.response + 1] = msg
     
-    if (sub2 == "\n") then
-        str = str .. "> "
-    elseif ( sub ~= "> ") then
-        str = str .. "\r\n> "
+    if _G.tcp_ota.sending then        
+        return
     end
 
+    _G.tcp_ota.sending = true
+    tcp_ota.conn:on("sent", tcp_ota.sendcomplete)
+    tcp_ota.sendcomplete()
     
-    if (loggedin==true) then
+end
+
+tcp_ota.s_output = function(str) 
+
+    --REFORMAT str
+    --sub = string.sub(str,string.len(str)-1)
+    --sub2 = string.sub(str,string.len(str))
+    
+    --if (sub2 == "\n") then
+    --    str = str .. "> "
+    --elseif ( sub ~= "> ") then
+     --   str = str .. "\r\n> "
+    --end
+
+    
+    if (tcp_ota.loggedin==true) then
     
         --print("Called:" .. str)
     
-        if (conn ~= nil) then
-            conn:send(lastcmd .. str)
+        if (tcp_ota.conn ~= nil) then
+            --sending = true
+            tcp_ota.send(tcp_ota.lastcmd .. str)
         end
         
-    else
-        if (conn ~= nil) then
-            conn:send("Enter password:")
+    else 
+        if (tcp_ota.conn ~= nil) then
+            tcp_ota.send("Enter password:")
         end
     end
 
-    if (connected == true) then 
-            m:publish(cmd_ch .. "/log",lastcmd .. str,0,0)
+    if (mqtt_connection ~= nil) then
+        if (mqtt_connection.connected == true) then 
+                mqtt_connection.m:publish(mqtt_connection.cmd_ch .. "/log",tcp_ota.lastcmd .. str,0,0)
+        end
     end
     
-    lastcmd = ""
+    tcp_ota.lastcmd = ""
  
 end
 
-node.output(s_output,1)
+node.output(tcp_ota.s_output,1)
 
 
-function startServer()
-   print("Wifi AP connected. IP:")
-   print(wifi.sta.getip())
+tcp_ota.startServer= function()
+   
    sv=net.createServer(net.TCP, 180)
    sv:listen(8080,   function(connection)
       print("Wifi console connected.")
-      conn = connection              
+
+     -- if (tcp_ota.conn ~= nil) then
+     --       tcp_ota.conn:close()
+     --       tcp_ota.conn = nil
+     --       tcp_ota.sending = false
+     -- end
+     -- tcp_ota.conn = connection              
       --print(s_output)
       
-      loggedin = false
-
-      s_output("Enter password:")
       
-      conn:on("receive", function(connection, pl)
-         if (loggedin==false) then
-            if (pl=="1234\r\n") then
-                loggedin=true
+      --tcp_ota.loggedin = false
+
+      --tcp_ota.s_output("Enter password:")
+      connection:send("Enter password:\r\n")
+      
+      connection:on("receive", function(connection, pl)
+         if (connection ~= tcp_ota.conn or tcp_ota.loggedin==false) then
+            if (pl=="nrj!!!\r\n") then
+                tcp_ota.loggedin=true
                 --node.output(s_output,1)
      
-                print("Logged in!\r\n> ")
+                connection:send("\r\nLogged in!\r\n> ")
+
+                if (connection ~= tcp_ota.conn) then
+                    old_conn = tcp_ota.conn
+                    tcp_ota.conn = connection
+                    if (old_conn~=nil) then
+                        old_conn:close()
+                    end
+                end
 
                 
             else
-                s_output("Enter password:\r\n")
+                connection:send("Enter password:\r\n")
             end
 
             return 
          end
          --s_output(pl .. "\r\n")
 
-         if (conn == connection) then
-             lastcmd = pl
+         if (tcp_ota.conn == connection) then
+             tcp_ota.lastcmd = pl
              node.input(pl)
          end 
       end)
       
-      conn:on("disconnection",function(connection)
+      connection:on("disconnection",function(connection)
          --node.output(nil,1)
-         conn = nil
-         loggedin = false
+         if (connection == tcp_ota.conn) then
+             tcp_ota.conn = nil
+             tcp_ota.loggedin = false
+         end
          
       end)
    end)  
@@ -90,7 +142,14 @@ function startServer()
    print("To map to local comport for use of ESPlorer")
 end
 
-startServer()
+if (wifi.sta.getip() ~= nil) then
+    tcp_ota.startServer()
+else
+    wifi.sta.eventMonReg(wifi.STA_GOTIP, tcp_ota.startServer)
+end
+
+
+
 
 --tmr.alarm(0, 1000, 1, function()
 --   if wifi.sta.getip()=="0.0.0.0" then

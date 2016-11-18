@@ -1,13 +1,14 @@
 intervall = 5000 -- in ms
 
 function StartProgram(intervall)
-    dofile('tcp-ota.lua')
+    -- This is for programming the module over wifi
+    --dofile('tcp-ota.lua')
     print("Starting EEM") 
     print(wifi.sta.getip())
 
     dofile('synctime.lua') 
     dofile('MQTT.lua')
-    --dofile('Pulse detector.lua')
+    dofile('PulseDetectorV2.lua')
     --dofile('owtemp.lua')
     --Add more stuff
     --dofile('MQTT.lua')

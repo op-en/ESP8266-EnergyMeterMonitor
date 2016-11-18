@@ -1,6 +1,6 @@
 clientid = wifi.sta.getmac()
 server = "op-en.se"
-cmd_ch = "test/cape/" .. wifi.sta.getmac() .. ""
+cmd_ch = "test/EMM/" .. wifi.sta.getmac() .. ""
 
 if (m ~= nil) then
     m:close()
@@ -43,7 +43,7 @@ function MQTTConnect()
     end 
     
     m:connect(server, 1883, 0, function(conn)
-      print("MQTT connected")
+      print("MQTT connected! Publishing to: " .. server .. " at topic: " .. cmd_ch)
       connected = true
       -- subscribe topic with qos = 0
       m:subscribe(cmd_ch .. "/cmd",0, function(conn)

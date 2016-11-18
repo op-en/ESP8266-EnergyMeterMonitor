@@ -7,7 +7,7 @@ gpio.mode(4,gpio.OUTPUT)
 
 do
   -- use pin 1 as the input pulse width counter
-  local pin, pulse_lenght, du, now, trig = 7, 0, 0, tmr.now, gpio.trig      
+  local pin, pulse_lenght, du, now, trig = 5, 0, 0, tmr.now, gpio.trig      
   local count,changed, ptime, delta, ts, tsu, lasttime = 0, false, 0,0,0,0,0  
   local t_lo,t_hi = 5000, 20000
   gpio.mode(pin,gpio.INT)

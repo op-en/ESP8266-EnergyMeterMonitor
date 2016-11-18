@@ -1,0 +1,24 @@
+#Flashing the firmware
+
+Flashing the firmware is the first thing you need to do before you start to communicate with you NodeMCU and upload the program files.
+
+Before you can start flashing however you need to have the right tools installed in you computer.
+
+The tools needed are python (a program language) and esptool (the flashing tool that is written in python)
+
+Installing python (if you done this previously you can skip this step since it only needs to be done once):
+
+ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+sudo brew install python
+sudo easy_install pip
+
+Installing the Esptool:
+
+sudo pip install esptool
+
+Locate firmware file
+
+cd path/to/github/folder
+
+Flash:
+esptool.py -p /dev/tty.wchusbserial1410 write_flash -fm dio -fs 32m 0x00000 nodemcu-master-21-modules-2016-07-11-12-51-01-float.bin

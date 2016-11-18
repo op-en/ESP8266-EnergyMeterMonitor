@@ -48,6 +48,8 @@ print("Opening pin " .. pin .. " for pulse detection")
 
 gpio.mode(pin, gpio.INPUT,gpio.PULLUP)
 gpio.trig(pin, "both", function(level)
+gpio.mode(3, gpio.OUTPUT)
+gpio.write(3,0)
 
  if (level == gpio.LOW) then
 
@@ -173,7 +175,7 @@ function MQTTConnect()
         return
     end 
     
-    m:connect("192.168.1.100", 1883, 0, function(conn)
+    m:connect("192.168.1.170", 1883, 0, function(conn)
       print("MQTT connected")
       connected = true
       -- subscribe topic with qos = 0

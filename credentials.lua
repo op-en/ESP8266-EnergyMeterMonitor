@@ -1,2 +1,4 @@
-SSID = "ssid"
-PASSWORD = "key"
+--SSID = "ssid"
+--PASSWORD = "key"
+SSID = "OpenEnergy"
+PASSWORD = "enhemligkod"
