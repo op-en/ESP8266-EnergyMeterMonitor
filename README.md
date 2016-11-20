@@ -13,7 +13,7 @@ This is a project to create an energy visualisation based on an ESP8266 that con
 
 4. Upload all files in the /src directory to the NodeMCU. Save the init file to last.
 
-5. Reboot the NodeMCU. And write down the visualisation url.
+5. Reboot the NodeMCU and write down the data url printed by the NodeMCU in the ESPlorer console.
 
 ###Hardware:
 
