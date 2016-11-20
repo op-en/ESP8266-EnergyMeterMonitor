@@ -32,7 +32,8 @@ heartbeat = 10
 oldtime = 0
 oldenergy = 0
 time=0
- 
+
+gpio.mode(4, gpio.OUTPUT)
 
 gpio.mode(pin, gpio.INPUT,gpio.PULLUP)
 
@@ -64,9 +65,11 @@ gpio.trig(pin, "both", function(level)
 
     if levelcount == 10 then
         mylevel = gpio.HIGH
+        gpio.write(4,gpio.HIGH)
     else
         mylevel = gpio.LOW
-    end
+        gpio.write(4,gpio.LOW)
+    end 
 
     log("" .. now .. " : " .. mylevel .. " : " .. delta)
 
