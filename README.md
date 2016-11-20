@@ -17,7 +17,7 @@ This is a project to create an energy visualisation based on an ESP8266 that con
 
 ###Hardware:
 
-1. Connect a phototransistor to the GND and GPIO5  (situated next to each other) on the NodeMCU using a 2 x female to female dupont cable. Make sure the phototransistor is turned the right way the short leg with the broad stop piece should be connected to GPIO5 and the long leg to GND.
+1. Connect a phototransistor to the GND and GPIO5  (situated next to each other) on the NodeMCU using a 2 x female to female dupont cable. Make sure the phototransistor is turned the right way. The short leg with the broad stop piece should be connected to GPIO5 and the long leg to GND.
 2. Insert a resistor with a value between 80k and 400k* in serial with the phototransistor.  
 
 *The smaller the resistande the more sensitive the phototransistor will be. A to small value will make the blue led on the NodeMCU to be on all the time instead of just flashing when the electric meter does. A to big value or no resistor at all will make the unit stop detecting pulses when the suroundings are to dark. 
