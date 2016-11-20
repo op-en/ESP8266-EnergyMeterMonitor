@@ -24,9 +24,9 @@ count = 0
 energy = 0
 power = 0
 last_power = 0
-factor = 3600000 -- 1000 imp/kWh. 1W will give us a period of 1 pulse per hour. I.e. P = 360000 ms  
-min_pulselenght = 1
-max_pulselenght = 90
+factor = 3600000/EMM_pulse_unit -- 1000 imp/kWh. 1W will give us a period of 1 pulse per hour. I.e. P = 360000 ms  
+min_pulselenght = EMM_min_pulselenght
+max_pulselenght = EMM_max_pulselenght
 min_change = 0
 heartbeat = 10
 oldtime = 0
@@ -154,11 +154,7 @@ gpio.trig(pin, "both", function(level)
 
   end)
 
-  function log(msg) 
-    if debug then
-        m:publish(cmd_ch .. "/debug",msg,0,0)
-    end
-  end
+ 
  
   function ioevent()
 
