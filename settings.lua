@@ -26,5 +26,5 @@ ApplicationName="EMM"
 
 -- Will write debug messages to test/EMM/[MAC of module]/debug
 -- Use log("my message") to write debug messages
-debug=true
+debug=false
 
