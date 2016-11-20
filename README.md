@@ -9,7 +9,7 @@ This is a project to create an energy visualisation based on an ESP8266 that con
 
 2. Flash your firmware with the float version of the firmware. Example: esptool.py -p /dev/cu.wchusbserial1410 write_flash -fm dio -fs 32m 0x00000 nodemcu-master-21-modules-2016-07-11-12-51-01-float.bin 
 
-3. Change the settings file with you WIFI credentials and meter pulse unit. And upload it through the ESPlorer to the NodeMCU
+3. Update the settings (settings.lua) file with you WIFI credentials and meter pulse unit (should be printed on the casing of the electric meter unit). And upload it through the ESPlorer to the NodeMCU
 
 4. Upload all files in the /src directory to the NodeMCU. Save the init file to last.
 
