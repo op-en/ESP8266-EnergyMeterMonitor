@@ -33,7 +33,7 @@ end)
 
 m:lwt(cmd_ch, "MCU offline", 0, 1)
  
- 
+  
 function MQTTConnect()
    
     --m:close()
@@ -44,7 +44,7 @@ function MQTTConnect()
     
     m:connect(server, 1883, 0, function(conn)
       print("MQTT connected!")
-      print("Publishing to server: " .. server .. " on topic: " .. cmd_ch)
+      print("Publishing data to MQTT server: " .. server .. " on topic: " .. cmd_ch)
       if debug then
         print("Debug messages will be written to " .. cmd_ch .. "/debug")
       end

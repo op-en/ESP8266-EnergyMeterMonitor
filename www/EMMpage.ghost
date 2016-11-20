@@ -1,0 +1,47 @@
+
+
+
+Hello your device id is: $ID
+
+
+<div id="PowerGraph" style="border: 1px solid black; width: 100%; height: 200px;">
+<object  style="width: 100%; height: 200px; top:-31px;" data = "">Graph from: https://op-en.se/graphs </object>
+</div>
+<p>
+This view shows live data during the last hour. Select an area to zoom in and double click to zoom out again. You can zoom out up to a week back in time.
+</p>
+
+<p>
+The graph is generated with Grafana an open source tool for creating dashboards. You can play around with it here https://op-en.se/graphs/dashboard/db/electric-meter-monitor-workshop (you can make dashboards but not save without an login)
+</p>
+
+<script>
+
+var paramArray = {'id': '5c:cf:7f:12:65:d4'}
+
+  var href = document.defaultView.location.href
+
+  // Get the url of myself and parse it for parameters.
+  if (href.indexOf('?') !== -1) {
+    var paramList = href.split('?')[1].split(/&|;/)
+    for (var p = 0, pLen = paramList.length; pLen > p; p++) {
+      var eachParam = paramList[ p ]
+      var valList = eachParam.split('=')
+      var name = unescape(valList[0])
+      var value = unescape(valList[1])
+
+      paramArray[ name ] = value.replace('"', '').replace('"', '')
+    }
+  }
+
+document.body.innerHTML = document.body.innerHTML.replace('$ID', paramArray['id']);
+
+//Inject graph
+var url = "https://op-en.se/graphs/dashboard-solo/db/electric-meter-monitor-workshop?from=now-1h&to=now&orTab=General&var-Module=test/EMM/$ID/meterevent&panelId=1".replace("$ID",paramArray['id'])
+
+var object = "<object data=\"$URL\" frameborder=\"0\" style=\"height: 200px; top:-31px;\"></object>".replace("$URL",url)
+
+document.getElementById("PowerGraph").innerHTML = object
+
+
+</script>

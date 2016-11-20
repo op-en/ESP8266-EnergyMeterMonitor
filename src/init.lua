@@ -5,7 +5,7 @@ function startup()
     if file.open("init.lua") == nil then
         print("init.lua deleted or renamed")
     else
-        print("Running")
+        print("Proceeding")
         file.close("init.lua")
         dofile("Startup.lua")
 
@@ -13,16 +13,18 @@ function startup()
     end
 end
 
-print("Connecting to WiFi access point...")
+print("_____________________________________")
+print("Initializing NodeMCU")
+--print("Connecting to WiFi access point...")
 wifi.setmode(wifi.STATION)
 --wifi.sta.setip({ip="192.168.0.230",netmask="255.255.255.0",gateway="192.168.0.1"})
 
 wifi.sta.eventMonReg(wifi.STA_IDLE, function() print("STATION_IDLE") end)
-wifi.sta.eventMonReg(wifi.STA_CONNECTING, function() print("STATION_CONNECTING") end)
+wifi.sta.eventMonReg(wifi.STA_CONNECTING, function() print("Connecting to WIFI network") end)
 wifi.sta.eventMonReg(wifi.STA_WRONGPWD, function() print("STATION_WRONG_PASSWORD") end)
 wifi.sta.eventMonReg(wifi.STA_APNOTFOUND, function() print("STATION_NO_AP_FOUND") end)
 wifi.sta.eventMonReg(wifi.STA_FAIL, function() print("STATION_CONNECT_FAIL") end)
-wifi.sta.eventMonReg(wifi.STA_GOTIP, function() print("STATION_GOT_IP") end)
+wifi.sta.eventMonReg(wifi.STA_GOTIP, function() print("Now connected to " .. SSID) end)
 wifi.sta.eventMonStart()
 
 wifi.sta.config(SSID, PASSWORD,1)
