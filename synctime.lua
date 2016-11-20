@@ -4,7 +4,7 @@ tsyncing = false
 function synctime()
     if (tsyncing == false) then
         tsyncing = true
-        sntp.sync('ntp1.sptime.se',
+        sntp.sync(timeserver,
           function(sec,usec,server)
             tsyncing = false
             print('Time synced: ' .. sec .. "." .. usec)
@@ -24,5 +24,5 @@ function synctime()
     end
 end
 
-print("Time sync in progress...")
+print("Time sync with ".. timeserver .. " in progress...")
 synctime()

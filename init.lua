@@ -1,5 +1,5 @@
 -- load credentials, 'SSID' and 'PASSWORD' declared and initialize in there
-dofile("credentials.lua")
+dofile("settings.lua")
    
 function startup()
     if file.open("init.lua") == nil then

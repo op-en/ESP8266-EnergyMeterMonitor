@@ -3,7 +3,7 @@ intervall = 5000 -- in ms
 function StartProgram(intervall)
     -- This is for programming the module over wifi
     --dofile('tcp-ota.lua')
-    print("Starting EEM") 
+    print("Starting " .. ApplicationName) 
     print(wifi.sta.getip())
 
     dofile('synctime.lua') 

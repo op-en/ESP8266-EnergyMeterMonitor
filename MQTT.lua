@@ -1,6 +1,6 @@
 clientid = wifi.sta.getmac()
 server = "op-en.se"
-cmd_ch = "test/EMM/" .. wifi.sta.getmac() .. ""
+cmd_ch = "test/".. ApplicationName .."/" .. wifi.sta.getmac() .. ""
 
 if (m ~= nil) then
     m:close()
@@ -43,7 +43,11 @@ function MQTTConnect()
     end 
     
     m:connect(server, 1883, 0, function(conn)
-      print("MQTT connected! Publishing to: " .. server .. " at topic: " .. cmd_ch)
+      print("MQTT connected!")
+      print("Publishing to server: " .. server .. " on topic: " .. cmd_ch)
+      if debug then
+        print("Debug messages will be written to " .. cmd_ch .. "/debug")
+      end
       connected = true
       -- subscribe topic with qos = 0
       m:subscribe(cmd_ch .. "/cmd",0, function(conn)
@@ -59,6 +63,12 @@ wifi.sta.eventMonReg(wifi.STA_GOTIP, function()
     print("STATION_GOT_IP") 
     MQTTConnect()
 end)
+
+function log(msg) 
+    if debug then
+        m:publish(cmd_ch .. "/debug",msg,0,0)
+    end
+end
  
 
 
