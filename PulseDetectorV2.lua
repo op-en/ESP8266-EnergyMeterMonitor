@@ -13,7 +13,7 @@ mylevel = false
 lastlevel = gpio.read(pin)
 ev_before = 0
 ev_delta=0
-debug=true
+debug=true 
 
 pulsestart = 0
 pulseend = 0
@@ -29,8 +29,10 @@ min_pulselenght = 1
 max_pulselenght = 90
 min_change = 0
 heartbeat = 10
-
-
+oldtime = 0
+oldenergy = 0
+time=0
+ 
 
 gpio.mode(pin, gpio.INPUT,gpio.PULLUP)
 
@@ -44,7 +46,7 @@ function checklevel(n)
         end
     return c
 end
-
+ 
 
 gpio.trig(pin, "both", function(level)
 
@@ -53,9 +55,9 @@ gpio.trig(pin, "both", function(level)
     last = last + 1
 
     sec, usec = rtctime.get()
+    time = sec + usec/1000000
     now = tmr.now()/1000
     
-
     delta = now - before
     ev_delta = now - ev_before
     ev_before = now
@@ -187,10 +189,11 @@ gpio.trig(pin, "both", function(level)
 
     msg2 = "{"
 
+
     if (synced) then
-        msg2 = msg2 ..  "\"time\":".. sec .. "." .. math.floor(usec/1000) .. ","
+        msg2 = msg2 ..  "\"time\":".. oldtime .. ","
     end
-    msg2 = msg2 .. "\"energy\":" .. energy
+    msg2 = msg2 .. "\"energy\":" .. oldenergy
 
 
     --If we have a previous pulse att period.
@@ -199,6 +202,11 @@ gpio.trig(pin, "both", function(level)
     end
     msg2 = msg2 .."}"
 
+    oldtime = time
+    oldenergy = energy
+
     
     m:publish(cmd_ch .. "/meterevent",msg2,0,0)
   end
+
+  
