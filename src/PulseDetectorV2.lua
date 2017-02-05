@@ -180,7 +180,7 @@ gpio.trig(pin, "both", function(level)
 
     
     if connected then
-        m:publish(cmd_ch .. "/ioevent",msg,0,0)
+        m:publish(cmd_ch .. "/ioevent",msg,0,1)
     end
   end
 
@@ -205,7 +205,7 @@ gpio.trig(pin, "both", function(level)
     oldenergy = energy
 
     
-    m:publish(cmd_ch .. "/meterevent",msg2,0,0)
+    m:publish(cmd_ch .. "/meterevent",msg2,0,1)
   end
 
   
